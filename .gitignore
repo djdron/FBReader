@@ -18,3 +18,5 @@ tools/resources/*.diff
 *.pro
 *.pro.user*
 *.moc.cpp
+
+build_*/
