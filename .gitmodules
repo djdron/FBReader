@@ -7,3 +7,9 @@
 [submodule "third-party/libexpat"]
 	path = third-party/libexpat
 	url = https://github.com/libexpat/libexpat.git
+[submodule "third-party/libunibreak"]
+	path = third-party/libunibreak
+	url = https://github.com/adah1972/libunibreak.git
+[submodule "third-party/fribidi"]
+	path = third-party/fribidi
+	url = https://github.com/fribidi/fribidi.git
