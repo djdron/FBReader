@@ -4,15 +4,20 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project(FBReader)
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" OR "${CMAKE_CXX_SIMULATE_ID}" STREQUAL "MSVC")
 add_definitions(-D_ITERATOR_DEBUG_LEVEL=0 -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE)
+endif()
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4267 /wd4244")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4267 /wd4244")
 else()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14")
 endif()
 
 add_definitions(-DUNICODE -D_UNICODE)
+
+include_directories("third-party/zlib")
 
 add_subdirectory("third-party/zlib" "zlib")
 set_property(TARGET zlib PROPERTY FOLDER "3rdparty/zlib")
@@ -62,7 +67,7 @@ set_property(TARGET libunibreak PROPERTY FOLDER "3rdparty")
 
 add_definitions(-DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STRINGIZE -DFRIBIDI_LIB_STATIC -DHAVE_STDLIB_H -DHAVE_STRING_H)
 add_executable(gen-unicode-version "third-party/fribidi/gen.tab/gen-unicode-version.c")
-set_property(TARGET gen-unicode-version PROPERTY FOLDER "3rdparty/fribidi")
+set_property(TARGET gen-unicode-version PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
 
 set(FGENWD "${CMAKE_CURRENT_SOURCE_DIR}/third-party/fribidi/gen.tab")
 set(FUV "${CMAKE_CURRENT_BINARY_DIR}/fribidi-unicode-version.h")
@@ -71,23 +76,35 @@ add_custom_command(OUTPUT ${FUV}
 	WORKING_DIRECTORY ${FGENWD}
 )
 
+add_custom_target(fribidi-unicode-version
+	DEPENDS ${FUV}
+)
+set_property(TARGET fribidi-unicode-version PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-set(FGEN "third-party/fribidi/gen.tab/packtab.c" ${FUV})
+set(PACKTAB "third-party/fribidi/gen.tab/packtab.c")
 
-add_executable(gen-bidi-type-tab "third-party/fribidi/gen.tab/gen-bidi-type-tab.c" ${FGEN})
-add_executable(gen-joining-type-tab "third-party/fribidi/gen.tab/gen-joining-type-tab.c" ${FGEN})
-add_executable(gen-arabic-shaping-tab "third-party/fribidi/gen.tab/gen-arabic-shaping-tab.c" ${FGEN})
-add_executable(gen-mirroring-tab "third-party/fribidi/gen.tab/gen-mirroring-tab.c" ${FGEN})
-add_executable(gen-brackets-tab "third-party/fribidi/gen.tab/gen-brackets-tab.c" ${FGEN})
-add_executable(gen-brackets-type-tab "third-party/fribidi/gen.tab/gen-brackets-type-tab.c" ${FGEN})
+add_executable(gen-bidi-type-tab "third-party/fribidi/gen.tab/gen-bidi-type-tab.c" ${PACKTAB})
+add_executable(gen-joining-type-tab "third-party/fribidi/gen.tab/gen-joining-type-tab.c" ${PACKTAB})
+add_executable(gen-arabic-shaping-tab "third-party/fribidi/gen.tab/gen-arabic-shaping-tab.c" ${PACKTAB})
+add_executable(gen-mirroring-tab "third-party/fribidi/gen.tab/gen-mirroring-tab.c" ${PACKTAB})
+add_executable(gen-brackets-tab "third-party/fribidi/gen.tab/gen-brackets-tab.c" ${PACKTAB})
+add_executable(gen-brackets-type-tab "third-party/fribidi/gen.tab/gen-brackets-type-tab.c" ${PACKTAB})
 
-set_property(TARGET gen-bidi-type-tab PROPERTY FOLDER "3rdparty/fribidi")
-set_property(TARGET gen-joining-type-tab PROPERTY FOLDER "3rdparty/fribidi")
-set_property(TARGET gen-arabic-shaping-tab PROPERTY FOLDER "3rdparty/fribidi")
-set_property(TARGET gen-mirroring-tab PROPERTY FOLDER "3rdparty/fribidi")
-set_property(TARGET gen-brackets-tab PROPERTY FOLDER "3rdparty/fribidi")
-set_property(TARGET gen-brackets-type-tab PROPERTY FOLDER "3rdparty/fribidi")
+add_dependencies(gen-bidi-type-tab fribidi-unicode-version)
+add_dependencies(gen-joining-type-tab fribidi-unicode-version)
+add_dependencies(gen-arabic-shaping-tab fribidi-unicode-version)
+add_dependencies(gen-mirroring-tab fribidi-unicode-version)
+add_dependencies(gen-brackets-tab fribidi-unicode-version)
+add_dependencies(gen-brackets-type-tab fribidi-unicode-version)
+
+set_property(TARGET gen-bidi-type-tab PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
+set_property(TARGET gen-joining-type-tab PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
+set_property(TARGET gen-arabic-shaping-tab PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
+set_property(TARGET gen-mirroring-tab PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
+set_property(TARGET gen-brackets-tab PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
+set_property(TARGET gen-brackets-type-tab PROPERTY FOLDER "3rdparty/fribidi/gen.tab")
 
 set(BIDIDEPTH 2)
 set(BIDITYPETABI "${CMAKE_CURRENT_BINARY_DIR}/bidi-type.tab.i")
@@ -141,7 +158,6 @@ set(FRIBIDI_SRCS
 	"third-party/fribidi/lib/fribidi-brackets.c"
 	"third-party/fribidi/lib/fribidi-run.c"
 	"third-party/fribidi/lib/fribidi-shape.c"
-	${FUV}
 	${BIDITYPETABI}
 	${JOININGTYPETABI}
 	${ARABICSHAPINGTABI}
@@ -162,3 +178,4 @@ add_subdirectory("zlibrary/core" "zlcore")
 get_target_property(ZLCORE_SOURCE_DIR zlcore SOURCE_DIR)
 include_directories("${ZLCORE_SOURCE_DIR}/include")
 add_subdirectory("zlibrary/text" "zltext")
+add_dependencies(zltext fribidi)
