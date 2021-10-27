@@ -60,6 +60,68 @@ add_library(libunibreak STATIC ${UNIBREAK_SRCS})
 include_directories("third-party/libunibreak/src")
 set_property(TARGET libunibreak PROPERTY FOLDER "3rdparty")
 
+add_definitions(-DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STRINGIZE -DFRIBIDI_LIB_STATIC -DHAVE_STDLIB_H -DHAVE_STRING_H)
+add_executable(gen-unicode-version "third-party/fribidi/gen.tab/gen-unicode-version.c")
+set_property(TARGET gen-unicode-version PROPERTY FOLDER "3rdparty/fribidi")
+
+set(FGENWD "${CMAKE_CURRENT_SOURCE_DIR}/third-party/fribidi/gen.tab")
+set(FUV "${CMAKE_CURRENT_BINARY_DIR}/fribidi-unicode-version.h")
+add_custom_command(OUTPUT ${FUV}
+	COMMAND gen-unicode-version "unidata/ReadMe.txt" "unidata/BidiMirroring.txt" > ${FUV}
+	WORKING_DIRECTORY ${FGENWD}
+)
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+set(FGEN "third-party/fribidi/gen.tab/packtab.c" ${FUV})
+
+add_executable(gen-bidi-type-tab "third-party/fribidi/gen.tab/gen-bidi-type-tab.c" ${FGEN})
+add_executable(gen-joining-type-tab "third-party/fribidi/gen.tab/gen-joining-type-tab.c" ${FGEN})
+add_executable(gen-arabic-shaping-tab "third-party/fribidi/gen.tab/gen-arabic-shaping-tab.c" ${FGEN})
+add_executable(gen-mirroring-tab "third-party/fribidi/gen.tab/gen-mirroring-tab.c" ${FGEN})
+add_executable(gen-brackets-tab "third-party/fribidi/gen.tab/gen-brackets-tab.c" ${FGEN})
+add_executable(gen-brackets-type-tab "third-party/fribidi/gen.tab/gen-brackets-type-tab.c" ${FGEN})
+
+set_property(TARGET gen-bidi-type-tab PROPERTY FOLDER "3rdparty/fribidi")
+set_property(TARGET gen-joining-type-tab PROPERTY FOLDER "3rdparty/fribidi")
+set_property(TARGET gen-arabic-shaping-tab PROPERTY FOLDER "3rdparty/fribidi")
+set_property(TARGET gen-mirroring-tab PROPERTY FOLDER "3rdparty/fribidi")
+set_property(TARGET gen-brackets-tab PROPERTY FOLDER "3rdparty/fribidi")
+set_property(TARGET gen-brackets-type-tab PROPERTY FOLDER "3rdparty/fribidi")
+
+set(BIDIDEPTH 2)
+set(BIDITYPETABI "${CMAKE_CURRENT_BINARY_DIR}/bidi-type.tab.i")
+add_custom_command(OUTPUT ${BIDITYPETABI}
+	COMMAND gen-bidi-type-tab ${BIDIDEPTH} "unidata/UnicodeData.txt" > ${BIDITYPETABI}
+	WORKING_DIRECTORY ${FGENWD}
+)
+set(JOININGTYPETABI "${CMAKE_CURRENT_BINARY_DIR}/joining-type.tab.i")
+add_custom_command(OUTPUT ${JOININGTYPETABI}
+	COMMAND gen-joining-type-tab ${BIDIDEPTH} "unidata/UnicodeData.txt" "unidata/ArabicShaping.txt" > ${JOININGTYPETABI}
+	WORKING_DIRECTORY ${FGENWD}
+)
+set(ARABICSHAPINGTABI "${CMAKE_CURRENT_BINARY_DIR}/arabic-shaping.tab.i")
+add_custom_command(OUTPUT ${ARABICSHAPINGTABI}
+	COMMAND gen-arabic-shaping-tab ${BIDIDEPTH} "unidata/UnicodeData.txt" > ${ARABICSHAPINGTABI}
+	WORKING_DIRECTORY ${FGENWD}
+)
+set(MIRRORINGTABI "${CMAKE_CURRENT_BINARY_DIR}/mirroring.tab.i")
+add_custom_command(OUTPUT ${MIRRORINGTABI}
+	COMMAND gen-mirroring-tab ${BIDIDEPTH} "unidata/BidiMirroring.txt" > ${MIRRORINGTABI}
+	WORKING_DIRECTORY ${FGENWD}
+)
+set(BRACKETSTABI "${CMAKE_CURRENT_BINARY_DIR}/brackets.tab.i")
+add_custom_command(OUTPUT ${BRACKETSTABI}
+	COMMAND gen-brackets-tab ${BIDIDEPTH} "unidata/BidiBrackets.txt" "unidata/UnicodeData.txt" > ${BRACKETSTABI}
+	WORKING_DIRECTORY ${FGENWD}
+)
+set(BRACKETSTYPETABI "${CMAKE_CURRENT_BINARY_DIR}/brackets-type.tab.i")
+add_custom_command(OUTPUT ${BRACKETSTYPETABI}
+	COMMAND gen-brackets-type-tab ${BIDIDEPTH} "unidata/BidiBrackets.txt" > ${BRACKETSTYPETABI}
+	WORKING_DIRECTORY ${FGENWD}
+)
+
+
 set(FRIBIDI_SRCS
 	"third-party/fribidi/lib/fribidi.c"
 	"third-party/fribidi/lib/fribidi-arabic.c"
@@ -79,11 +141,17 @@ set(FRIBIDI_SRCS
 	"third-party/fribidi/lib/fribidi-brackets.c"
 	"third-party/fribidi/lib/fribidi-run.c"
 	"third-party/fribidi/lib/fribidi-shape.c"
+	${FUV}
+	${BIDITYPETABI}
+	${JOININGTYPETABI}
+	${ARABICSHAPINGTABI}
+	${MIRRORINGTABI}
+	${BRACKETSTABI}
+	${BRACKETSTYPETABI}
 )
-add_definitions(-DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STRINGIZE -DFRIBIDI_LIB_STATIC -DHAVE_STDLIB_H)
 add_library(fribidi STATIC ${FRIBIDI_SRCS})
 include_directories("third-party/fribidi/lib")
-set_property(TARGET fribidi PROPERTY FOLDER "3rdparty")
+set_property(TARGET fribidi PROPERTY FOLDER "3rdparty/fribidi")
 
 
 add_definitions(-DBASEDIR="/share")
