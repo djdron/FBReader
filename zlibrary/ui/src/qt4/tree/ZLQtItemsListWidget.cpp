@@ -17,13 +17,13 @@
  * 02110-1301, USA.
  */
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtGui/QPixmap>
 #include <QtGui/QPalette>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QScrollBar>
 
 #include <ZLibrary.h>
 #include <ZLNetworkManager.h>

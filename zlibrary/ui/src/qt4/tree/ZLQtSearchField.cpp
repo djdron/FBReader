@@ -18,9 +18,9 @@
  */
 
 #include <QtCore/QDebug>
-#include <QtGui/QStyle>
-#include <QtGui/QCompleter>
-#include <QtGui/QStringListModel>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QCompleter>
+#include <QtCore/QStringListModel>
 
 #include <ZLResource.h>
 #include <ZLOptions.h>

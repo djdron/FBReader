@@ -24,10 +24,12 @@
 #include <QtCore/QDir>
 #include <QtCore/QList>
 #include <QtCore/QTimer>
+#include <QtCore/QUrlQuery>
 
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkCookie>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QAuthenticator>
@@ -150,12 +152,14 @@ void ZLQtNetworkManager::prepareReply(ZLQtNetworkReplyScope &scope, QNetworkRequ
 	QNetworkReply *reply = NULL;
 	if (!scope.request->postParameters().empty()) {
 		QByteArray data;
-		QUrl tmp;
+		QUrlQuery tmp_query;
 		typedef std::pair<std::string, std::string> string_pair;
 		foreach (const string_pair &pair, scope.request->postParameters()) {
-			tmp.addQueryItem(::qtString(pair.first), ::qtString(pair.second));
+			tmp_query.addQueryItem(::qtString(pair.first), ::qtString(pair.second));
 		}
-		data = tmp.encodedQuery();
+		QUrl tmp;
+		tmp.setQuery(tmp_query);
+		data = tmp.query(QUrl::FullyEncoded).toLatin1();
 		reply = const_cast<QNetworkAccessManager&>(myManager).post(networkRequest, data);
 	} else {
 		reply = const_cast<QNetworkAccessManager&>(myManager).get(networkRequest);

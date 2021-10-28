@@ -177,5 +177,8 @@ add_definitions(-DAPPIMAGEDIR="/share/icons")
 add_subdirectory("zlibrary/core" "zlcore")
 get_target_property(ZLCORE_SOURCE_DIR zlcore SOURCE_DIR)
 include_directories("${ZLCORE_SOURCE_DIR}/include")
+
 add_subdirectory("zlibrary/text" "zltext")
 add_dependencies(zltext fribidi)
+
+add_subdirectory("zlibrary/ui" "zlui")

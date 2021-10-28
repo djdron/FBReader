@@ -17,10 +17,10 @@
  * 02110-1301, USA.
  */
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QScrollBar>
-#include <QtGui/QGraphicsDropShadowEffect>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QGraphicsDropShadowEffect>
 
 #include <QtCore/QDebug>
 

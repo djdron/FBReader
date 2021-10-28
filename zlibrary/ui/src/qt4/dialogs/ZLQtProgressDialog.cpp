@@ -17,8 +17,6 @@
  * 02110-1301, USA.
  */
 
-#include <unistd.h>
-
 #include <QtCore/QThreadPool>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
