@@ -179,6 +179,10 @@ get_target_property(ZLCORE_SOURCE_DIR zlcore SOURCE_DIR)
 include_directories("${ZLCORE_SOURCE_DIR}/include")
 
 add_subdirectory("zlibrary/text" "zltext")
+get_target_property(ZLTEXT_SOURCE_DIR zltext SOURCE_DIR)
+include_directories("${ZLTEXT_SOURCE_DIR}/include")
 add_dependencies(zltext fribidi)
 
 add_subdirectory("zlibrary/ui" "zlui")
+
+add_subdirectory("fbreader")

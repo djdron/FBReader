@@ -29,7 +29,7 @@
 class ZLFile;
 
 class NetworkAuthenticationManager;
-struct URLRewritingRule;
+class URLRewritingRule;
 
 class OPDSLink : public NetworkLink {
 

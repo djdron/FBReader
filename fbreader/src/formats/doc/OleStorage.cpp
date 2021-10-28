@@ -86,16 +86,17 @@ bool OleStorage::readDIFAT(char *oleBuf) {
 	//for files > 6.78 mb we need read additional DIFAT fields
 	for (int i = 0; difatBlock > 0 && i < difatSectorNumbers; ++i) {
 		ZLLogger::Instance().println("DocPlugin", "Read additional data for DIFAT");
-		char buffer[mySectorSize];
+		std::vector<char> buffer;
+		buffer.resize(mySectorSize);
 		myInputStream->seek(BBD_BLOCK_SIZE + difatBlock * mySectorSize, true);
-		if (myInputStream->read(buffer, mySectorSize) != mySectorSize) {
+		if (myInputStream->read(buffer.data(), mySectorSize) != mySectorSize) {
 			ZLLogger::Instance().println("DocPlugin", "Error read DIFAT!");
 			return false;
 		}
 		for (unsigned int j = 0; j < (mySectorSize - 4); j += 4) {
-			myDIFAT.push_back(OleUtil::get4Bytes(buffer, j));
+			myDIFAT.push_back(OleUtil::get4Bytes(buffer.data(), j));
 		}
-		difatBlock = OleUtil::get4Bytes(buffer, mySectorSize - 4); //next DIFAT block is pointed at the end of the sector
+		difatBlock = OleUtil::get4Bytes(buffer.data(), mySectorSize - 4); //next DIFAT block is pointed at the end of the sector
 	}
 
 	//removing unusable DIFAT links
@@ -107,7 +108,8 @@ bool OleStorage::readDIFAT(char *oleBuf) {
 }
 
 bool OleStorage::readBBD(char *oleBuf) {
-	char buffer[mySectorSize];
+	std::vector<char> buffer;
+	buffer.resize(mySectorSize);
 	unsigned int bbdNumberBlocks = OleUtil::getU4Bytes(oleBuf, 0x2c); //number of big blocks
 
 	if (myDIFAT.size() < bbdNumberBlocks) {
@@ -123,12 +125,12 @@ bool OleStorage::readBBD(char *oleBuf) {
 			return false;
 		}
 		myInputStream->seek(BBD_BLOCK_SIZE + bbdSector * mySectorSize, true);
-		if (myInputStream->read(buffer, mySectorSize) != mySectorSize) {
+		if (myInputStream->read(buffer.data(), mySectorSize) != mySectorSize) {
 			ZLLogger::Instance().println("DocPlugin", "Error during reading BBD!");
 			return false;
 		}
 		for (unsigned int j = 0; j < mySectorSize; j += 4) {
-			myBBD.push_back(OleUtil::get4Bytes(buffer, j));
+			myBBD.push_back(OleUtil::get4Bytes(buffer.data(), j));
 		}
 	}
 	return true;
@@ -143,7 +145,8 @@ bool OleStorage::readSBD(char *oleBuf) {
 		return true;
 	}
 
-	char buffer[mySectorSize];
+	std::vector<char> buffer;
+	buffer.resize(mySectorSize);
 	for (int i = 0; i < sbdCount; ++i) {
 		if (i != 0) {
 			if (sbdCur < 0 || (unsigned int)sbdCur >= myBBD.size()) {
@@ -156,12 +159,12 @@ bool OleStorage::readSBD(char *oleBuf) {
 			break;
 		}
 		myInputStream->seek(BBD_BLOCK_SIZE + sbdCur * mySectorSize, true);
-		if (myInputStream->read(buffer, mySectorSize) != mySectorSize) {
+		if (myInputStream->read(buffer.data(), mySectorSize) != mySectorSize) {
 			ZLLogger::Instance().println("DocPlugin", "reading error during parsing SBD");
 			return false;
 		}
 		for (unsigned int j = 0; j < mySectorSize; j += 4) {
-			mySBD.push_back(OleUtil::get4Bytes(buffer, j));
+			mySBD.push_back(OleUtil::get4Bytes(buffer.data(), j));
 		}
 
 	}
@@ -175,15 +178,16 @@ bool OleStorage::readProperties(char *oleBuf) {
 		return false;
 	}
 
-	char buffer[mySectorSize];
+	std::vector<char> buffer;
+	buffer.resize(mySectorSize);
 	do {
 		myInputStream->seek(BBD_BLOCK_SIZE + propCur * mySectorSize, true);
-		if (myInputStream->read(buffer, mySectorSize) != mySectorSize) {
+		if (myInputStream->read(buffer.data(), mySectorSize) != mySectorSize) {
 			ZLLogger::Instance().println("DocPlugin", "Error during reading properties");
 			return false;
 		}
 		for (unsigned int j = 0; j < mySectorSize; j += 128) {
-			myProperties.push_back(std::string(buffer + j, 128));
+			myProperties.push_back(std::string(buffer.data() + j, 128));
 		}
 		if (propCur < 0 || (std::size_t)propCur >= myBBD.size()) {
 			break;

@@ -36,13 +36,14 @@ ZLFileImage::Blocks DocInlineImageReader::getImagePieceInfo(unsigned int dataPos
 
 	//reading PICF structure (see p. 421 [MS-DOC])
 	unsigned int picfHeaderSize = 4 + 2 + 8; //record length, headerLength and storage format
-	char headerBuffer[picfHeaderSize];
-	if (myDataStream->read(headerBuffer, picfHeaderSize) != picfHeaderSize) {
+	std::vector<char> headerBuffer;
+	headerBuffer.resize(picfHeaderSize);
+	if (myDataStream->read(headerBuffer.data(), picfHeaderSize) != picfHeaderSize) {
 		return ZLFileImage::Blocks();
 	}
-	unsigned int length = OleUtil::getU4Bytes(headerBuffer, 0);
-	unsigned int headerLength = OleUtil::getU2Bytes(headerBuffer, 4);
-	unsigned int formatType = OleUtil::getU2Bytes(headerBuffer, 6);
+	unsigned int length = OleUtil::getU4Bytes(headerBuffer.data(), 0);
+	unsigned int headerLength = OleUtil::getU2Bytes(headerBuffer.data(), 4);
+	unsigned int formatType = OleUtil::getU2Bytes(headerBuffer.data(), 6);
 
 	if (formatType != 0x0064) { //external link to some file; see p.394 [MS-DOC]
 		//TODO implement
