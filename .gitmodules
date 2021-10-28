@@ -13,3 +13,6 @@
 [submodule "third-party/fribidi"]
 	path = third-party/fribidi
 	url = https://github.com/fribidi/fribidi.git
+[submodule "third-party/sqlite"]
+	path = third-party/sqlite
+	url = https://github.com/azadkuh/sqlite-amalgamation.git

@@ -185,4 +185,9 @@ add_dependencies(zltext fribidi)
 
 add_subdirectory("zlibrary/ui" "zlui")
 
+add_subdirectory("third-party/sqlite" "sqlite")
+set_property(TARGET SQLite3 PROPERTY FOLDER "3rdparty")
+get_target_property(SQLITE_SOURCE_DIR SQLite3 SOURCE_DIR)
+include_directories("${SQLITE_SOURCE_DIR}")
+
 add_subdirectory("fbreader")
