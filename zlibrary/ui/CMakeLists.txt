@@ -18,5 +18,5 @@ LIST(APPEND SRCS_CXX ${SRCS_CXX_PLATFORM})
 file(GLOB_RECURSE SRCS_H "src/qt4/*.h")
 
 add_library(${PROJECT_NAME} STATIC ${SRCS_CXX} ${SRCS_H})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets Qt5::Network)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets Qt5::Network zlcore zltext)
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "zl")

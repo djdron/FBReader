@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.1)
+﻿cmake_minimum_required(VERSION 3.13)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -29,6 +29,8 @@ get_target_property(ZLIB_BINARY_DIR zlib BINARY_DIR)
 get_target_property(ZLIB_SOURCE_DIR zlib SOURCE_DIR)
 include_directories(${ZLIB_BINARY_DIR} ${ZLIB_SOURCE_DIR})
 
+set(CMAKE_DEBUG_POSTFIX "")
+
 set(BZIP2_SRCS
     "third-party/bzip2/blocksort.c"
     "third-party/bzip2/huffman.c"
@@ -38,7 +40,7 @@ set(BZIP2_SRCS
     "third-party/bzip2/decompress.c"
     "third-party/bzip2/bzlib.c"
 )
-add_library(bzip2 SHARED ${BZIP2_SRCS})
+add_library(bzip2 STATIC ${BZIP2_SRCS})
 include_directories("third-party/bzip2")
 set_property(TARGET bzip2 PROPERTY FOLDER "3rdparty")
 
@@ -177,11 +179,12 @@ add_definitions(-DAPPIMAGEDIR="/share/icons")
 add_subdirectory("zlibrary/core" "zlcore")
 get_target_property(ZLCORE_SOURCE_DIR zlcore SOURCE_DIR)
 include_directories("${ZLCORE_SOURCE_DIR}/include")
+target_link_libraries(zlcore zlib bzip2 expat libunibreak)
 
 add_subdirectory("zlibrary/text" "zltext")
 get_target_property(ZLTEXT_SOURCE_DIR zltext SOURCE_DIR)
 include_directories("${ZLTEXT_SOURCE_DIR}/include")
-add_dependencies(zltext fribidi)
+target_link_libraries(zltext zlcore fribidi)
 
 add_subdirectory("zlibrary/ui" "zlui")
 
@@ -191,3 +194,4 @@ get_target_property(SQLITE_SOURCE_DIR SQLite3 SOURCE_DIR)
 include_directories("${SQLITE_SOURCE_DIR}")
 
 add_subdirectory("fbreader")
+target_link_libraries(fbreader zlcore zltext zlui SQLite3)

@@ -32,9 +32,6 @@ public:
 	static ZLUnicodeUtil::Ucs2String longFilePath(const std::string &path);
 	
 private:
-	ZLWin32FSManager() {}
-	
-private:
 	shared_ptr<ZLMimeType> mimeType(const std::string &path) const;
 	void normalizeRealPath(std::string &path) const;
 	std::string resolveSymlink(const std::string &path) const;

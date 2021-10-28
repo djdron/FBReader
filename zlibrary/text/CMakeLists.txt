@@ -6,5 +6,4 @@ file(GLOB_RECURSE SRCS_H "*.h")
 include_directories("include")
 
 add_library(${PROJECT_NAME} STATIC ${SRCS_CXX} ${SRCS_H})
-target_link_libraries(${PROJECT_NAME})
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "zl")

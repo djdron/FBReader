@@ -39,10 +39,15 @@
 #include "../view/ZLQtPaintContext.h"
 #include "../network/ZLQtNetworkManager.h"
 #include "../application/ZLQtApplicationWindow.h"
+#ifdef _WIN32
+#include "../../win32/message/ZLWin32Message.h"
+#include "../../../../core/src/win32/encoding/ZLWin32EncodingConverter.h"
+#else//_WIN32
 #include "../../unix/message/ZLUnixMessage.h"
+#include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
+#endif//_WIN32
 #include "../../../../core/src/util/ZLKeyUtil.h"
 #include "../../../../core/src/unix/xmlconfig/XMLConfig.h"
-#include "../../../../core/src/unix/iconv/IConvEncodingConverter.h"
 #include "../util/ZLQtUtil.h"
 
 class ZLQtLibraryImplementation : public ZLibraryImplementation {
@@ -85,9 +90,14 @@ void ZLQtLibraryImplementation::init(int &argc, char **&argv) {
 	ZLQtTimeManager::createInstance();
 	ZLQtFSManager::createInstance();
 	ZLQtDialogManager::createInstance();
+#ifdef _WIN32
+	ZLWin32CommunicationManager::createInstance();
+	ZLEncodingCollection::Instance().registerProvider(new ZLWin32EncodingConverterProvider());
+#else//_WIN32
 	ZLUnixCommunicationManager::createInstance();
-	ZLQtImageManager::createInstance();
 	ZLEncodingCollection::Instance().registerProvider(new IConvEncodingConverterProvider());
+#endif//_WIN32
+	ZLQtImageManager::createInstance();
 	ZLQtNetworkManager::createInstance();
 
 	setStylesheet("style.qss");

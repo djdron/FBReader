@@ -16,4 +16,3 @@ file(STRINGS "VERSION" VERSION_STR)
 add_definitions(-DVERSION="${VERSION_STR}")
 
 add_executable(${PROJECT_NAME} ${SRCS_CXX} ${SRCS_H})
-target_link_libraries(${PROJECT_NAME})

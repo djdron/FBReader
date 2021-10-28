@@ -20,9 +20,13 @@
 #ifndef __ZLQTFSMANAGER_H__
 #define __ZLQTFSMANAGER_H__
 
+#ifdef _WIN32
+#include "../../../../core/src/win32/filesystem/ZLWin32FSManager.h"
+class ZLQtFSManager : public ZLWin32FSManager {
+#else//_WIN32
 #include "../../../../core/src/unix/filesystem/ZLUnixFSManager.h"
-
 class ZLQtFSManager : public ZLUnixFSManager {
+#endif//_WIN32
 
 public:
 	static void createInstance() { ourInstance = new ZLQtFSManager(); }
