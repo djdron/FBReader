@@ -385,9 +385,8 @@ void FBReader::setMode(ViewMode mode) {
 			break;
 		case LIBRARY_MODE:
 		{
-			shared_ptr<Book> currentBook = myModel->book();
-			((LibraryView&)*myLibraryByAuthorView).showBook(currentBook);
-			((LibraryView&)*myLibraryByTagView).showBook(currentBook);
+			((LibraryView&)*myLibraryByAuthorView).showBook(currentBook());
+			((LibraryView&)*myLibraryByTagView).showBook(currentBook());
 			showLibraryView();
 			break;
 		}
@@ -508,7 +507,7 @@ void FBReader::openInDictionary(const std::string &word) {
 }
 
 shared_ptr<Book> FBReader::currentBook() const {
-	return myModel->book();
+	return myModel.isNull() ? NULL : myModel->book();
 }
 
 bool FBReader::showAuthDialog(const std::string &siteName, std::string &userName, std::string &password, const ZLResourceKey &errorKey) {
