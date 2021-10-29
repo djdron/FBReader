@@ -205,11 +205,7 @@ bool ZLWin32FSManager::removeFile(const std::string &path) const {
 
 ZLUnicodeUtil::Ucs2String ZLWin32FSManager::longFilePath(const std::string &path) {
 	ZLUnicodeUtil::Ucs2String lfp;
-	if (ZLStringUtil::stringStartsWith(path, "\\\\")) {
-		::createNTWCHARString(lfp, "\\\\?\\UNC" + path.substr(1));
-	} else {
-		::createNTWCHARString(lfp, "\\\\?\\" + path);
-	}
+	::createNTWCHARString(lfp, path);
 	return lfp;
 }
 

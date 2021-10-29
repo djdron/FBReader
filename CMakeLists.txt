@@ -172,9 +172,9 @@ include_directories("third-party/fribidi/lib")
 set_property(TARGET fribidi PROPERTY FOLDER "3rdparty/fribidi")
 
 
-add_definitions(-DBASEDIR="/share")
-add_definitions(-DIMAGEDIR="/share/icons")
-add_definitions(-DAPPIMAGEDIR="/share/icons")
+add_definitions(-DBASEDIR=".")
+add_definitions(-DIMAGEDIR="./icons")
+add_definitions(-DAPPIMAGEDIR="./icons")
 
 add_subdirectory("zlibrary/core" "zlcore")
 get_target_property(ZLCORE_SOURCE_DIR zlcore SOURCE_DIR)

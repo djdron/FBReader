@@ -22,7 +22,7 @@
 
 #include "../../unix/library/ZLibraryImplementation.h"
 
-const std::string ZLibrary::FileNameDelimiter("\\");
+const std::string ZLibrary::FileNameDelimiter("/");
 const std::string ZLibrary::PathDelimiter(";");
 const std::string ZLibrary::EndOfLine("\r\n");
 
