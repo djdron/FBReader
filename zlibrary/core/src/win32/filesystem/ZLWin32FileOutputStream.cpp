@@ -35,7 +35,7 @@ bool ZLWin32FileOutputStream::open() {
 	ZLUnicodeUtil::Ucs2String wPath = ZLWin32FSManager::longFilePath(myTemporaryName);
 	myFile = CreateFileW(::wchar(wPath), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
-	return myFile != 0;
+	return myFile != INVALID_HANDLE_VALUE;
 }
 
 void ZLWin32FileOutputStream::write(const char *data, std::size_t len) {
@@ -48,7 +48,7 @@ void ZLWin32FileOutputStream::write(const std::string &str) {
 }
 
 void ZLWin32FileOutputStream::close() {
-	if (myFile != 0) {
+	if (myFile != INVALID_HANDLE_VALUE) {
 		CloseHandle(myFile);
 		myFile = 0;
 		if (!myHasErrors) {

@@ -22,6 +22,7 @@
 
 #include <ZLStringUtil.h>
 #include <ZLUnicodeUtil.h>
+#include <ZLibrary.h>
 
 #include "ZLWin32FSManager.h"
 #include "ZLWin32RootDir.h"
@@ -60,7 +61,7 @@ static std::string getAppDir() {
 	GetModuleFileNameW(0, (WCHAR*)&buffer[0], 2047);
 	std::string result;
 	ZLUnicodeUtil::ucs2ToUtf8(result, buffer);
-	result.erase(result.rfind('\\'));
+	result.erase(result.rfind(ZLibrary::FileNameDelimiter));
 	return result;
 }
 
@@ -137,7 +138,7 @@ ZLFSDir *ZLWin32FSManager::createNewDirectory(const std::string &path) const {
 			return 0;
 		}
 		subpaths.push_back(wPath);
-		int index = current.rfind('\\');
+		int index = current.rfind(ZLibrary::FileNameDelimiter);
 		if (index == -1) {
 			return 0;
 		}
@@ -177,7 +178,7 @@ std::string ZLWin32FSManager::parentPath(const std::string &path) const {
 	}
 	int index = findLastFileNameDelimiter(path);
 	std::string result = path.substr(0, index);
-	return (result.length() == 2) ? result + '\\' : result;
+	return (result.length() == 2) ? result + ZLibrary::FileNameDelimiter : result;
 }
 
 ZLFileInfo ZLWin32FSManager::fileInfo(const std::string &path) const {
