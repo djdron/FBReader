@@ -19,11 +19,8 @@ add_definitions(-DUNICODE -D_UNICODE)
 
 include_directories("third-party/zlib")
 
-add_subdirectory("third-party/zlib" "zlib")
-set_property(TARGET zlib PROPERTY FOLDER "3rdparty/zlib")
-set_property(TARGET zlibstatic PROPERTY FOLDER "3rdparty/zlib")
-set_property(TARGET example PROPERTY FOLDER "3rdparty/zlib")
-set_property(TARGET minigzip PROPERTY FOLDER "3rdparty/zlib")
+add_subdirectory("third-party/zlib" "zlib" EXCLUDE_FROM_ALL)
+set_property(TARGET zlib PROPERTY FOLDER "3rdparty")
 
 get_target_property(ZLIB_BINARY_DIR zlib BINARY_DIR)
 get_target_property(ZLIB_SOURCE_DIR zlib SOURCE_DIR)
@@ -47,7 +44,7 @@ set_property(TARGET bzip2 PROPERTY FOLDER "3rdparty")
 set(EXPAT_BUILD_EXAMPLES OFF)
 set(EXPAT_BUILD_TESTS OFF)
 set(EXPAT_BUILD_TOOLS OFF)
-add_subdirectory("third-party/libexpat/expat" "libexpat")
+add_subdirectory("third-party/libexpat/expat" "libexpat" EXCLUDE_FROM_ALL)
 set_property(TARGET expat PROPERTY FOLDER "3rdparty")
 
 get_target_property(EXPAT_SOURCE_DIR expat SOURCE_DIR)
@@ -188,10 +185,77 @@ target_link_libraries(zltext zlcore fribidi)
 
 add_subdirectory("zlibrary/ui" "zlui")
 
-add_subdirectory("third-party/sqlite" "sqlite")
+add_subdirectory("third-party/sqlite" "sqlite" EXCLUDE_FROM_ALL)
 set_property(TARGET SQLite3 PROPERTY FOLDER "3rdparty")
 get_target_property(SQLITE_SOURCE_DIR SQLite3 SOURCE_DIR)
 include_directories("${SQLITE_SOURCE_DIR}")
 
 add_subdirectory("fbreader")
 target_link_libraries(fbreader zlcore zltext zlui SQLite3)
+
+set(QT_PATH "${CMAKE_PREFIX_PATH}/../..")
+set(QT_LIBRARIES_INSTALL
+	"${QT_PATH}/bin/Qt5Core.dll"
+	"${QT_PATH}/bin/Qt5Gui.dll"
+	"${QT_PATH}/bin/Qt5Network.dll"
+	"${QT_PATH}/bin/Qt5Svg.dll"
+	"${QT_PATH}/bin/Qt5Widgets.dll"
+)
+set(QT_IMAGEFORMATS_INSTALL
+	"${QT_PATH}/plugins/imageformats/qgif.dll"
+	"${QT_PATH}/plugins/imageformats/qicns.dll"
+	"${QT_PATH}/plugins/imageformats/qico.dll"
+	"${QT_PATH}/plugins/imageformats/qjpeg.dll"
+	"${QT_PATH}/plugins/imageformats/qsvg.dll"
+	"${QT_PATH}/plugins/imageformats/qtga.dll"
+	"${QT_PATH}/plugins/imageformats/qtiff.dll"
+	"${QT_PATH}/plugins/imageformats/qwbmp.dll"
+	"${QT_PATH}/plugins/imageformats/qwebp.dll"
+)
+
+if(WIN32)
+set(CPACK_PACKAGE_EXECUTABLES fbreader "FBReader")
+install(TARGETS fbreader zlib expat RUNTIME DESTINATION ".")
+install(FILES		 ${QT_LIBRARIES_INSTALL} DESTINATION ".")
+install(FILES		 ${QT_IMAGEFORMATS_INSTALL} DESTINATION "./imageformats/")
+install(FILES		"${QT_PATH}/plugins/bearer/qgenericbearer.dll"  DESTINATION "./bearer/")
+install(FILES		"${QT_PATH}/plugins/iconengines/qsvgicon.dll"  DESTINATION "./iconengines/")
+install(FILES		"${QT_PATH}/plugins/platforms/qwindows.dll"  DESTINATION "./platforms/")
+install(FILES		"${QT_PATH}/plugins/styles/qwindowsvistastyle.dll"  DESTINATION "./styles/")
+install(DIRECTORY	"zlibrary/core/data/encodings" DESTINATION "./zlibrary/")
+install(DIRECTORY	"zlibrary/core/data/resources" DESTINATION "./zlibrary/")
+install(FILES		"zlibrary/core/data/languagePatterns.zip"  DESTINATION "./zlibrary/")
+install(FILES		"zlibrary/core/data/unicode.xml.gz"  DESTINATION "./zlibrary/")
+install(FILES		"zlibrary/text/data/hyphenationPatterns.zip"  DESTINATION "./zlibrary/")
+install(FILES		"zlibrary/ui/data/keynames.desktop-qt4.xml"  DESTINATION "./zlibrary/" RENAME "keynames-qt4.xml")
+install(FILES		"zlibrary/ui/data/style.desktop.qss"  DESTINATION "./zlibrary/" RENAME "style.qss")
+file(GLOB BOOKTREE_RES "fbreader/data/icons/booktree/new/*")
+install(FILES		 ${BOOKTREE_RES} DESTINATION "./icons/")
+file(GLOB TOOLBAR_RES "fbreader/data/icons/toolbar/desktop/*")
+install(FILES		 ${TOOLBAR_RES} DESTINATION "./icons/")
+install(FILES		"fbreader/data/icons/application/64x64.png" DESTINATION "./icons/" RENAME "FBReader.png")
+install(FILES		"fbreader/data/icons/back_button.png" DESTINATION "./icons/")
+install(FILES		"fbreader/data/icons/forward_button.png" DESTINATION "./icons/")
+install(FILES		"fbreader/data/icons/search_icon.png" DESTINATION "./icons/")
+install(FILES		"fbreader/data/default/config.desktop.xml" DESTINATION "./FBReader/default/" RENAME "config.xml")
+install(FILES		"fbreader/data/default/keymap.desktop.xml" DESTINATION "./FBReader/default/" RENAME "keymap.xml")
+install(FILES		"fbreader/data/default/menubar.desktop.xml" DESTINATION "./FBReader/default/" RENAME "menubar.xml")
+install(FILES		"fbreader/data/default/styles.desktop.xml" DESTINATION "./FBReader/default/" RENAME "styles.xml")
+install(FILES		"fbreader/data/default/toolbar.desktop.xml" DESTINATION "./FBReader/default/" RENAME "toolbar.xml")
+install(DIRECTORY	"fbreader/data/formats" DESTINATION "./FBReader/")
+file(GLOB RESOURCES_RES "fbreader/data/resources/*.xml")
+install(FILES		 ${RESOURCES_RES} DESTINATION "./FBReader/resources/")
+set(CPACK_PACKAGE_NAME "FBReader")
+set(CPACK_PACKAGE_VENDOR djdron)
+file(STRINGS "fbreader/VERSION" VERSION_STR)
+set(CPACK_PACKAGE_VERSION "${VERSION_STR}")
+set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/fbreader/data/icons/application/FBReader.ico")
+set(CPACK_WIX_PRODUCT_ICON ${CPACK_PACKAGE_ICON})
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "FBReader")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "e-book reader")
+set(CPACK_PACKAGE_FILE_NAME "FBReader_${CPACK_PACKAGE_VERSION}_win32_qt5")
+set(CPACK_GENERATOR WIX)
+set(CPACK_WIX_UPGRADE_GUID "AFD379EA-E866-4900-9293-01B4AC936072")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/gpl-2.0.rtf")
+include(CPack)
+endif(WIN32)

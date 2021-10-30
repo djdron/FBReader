@@ -11,8 +11,11 @@ file(GLOB SRCS_CXX
 	"src/tree/*.cpp" "src/optionsDialog/*.cpp"
 )
 file(GLOB_RECURSE SRCS_H "src/*.h")
+if(WIN32)
+file(GLOB RES_RC "win32/fbreader.rc")
+endif(WIN32)
 
 file(STRINGS "VERSION" VERSION_STR)
 add_definitions(-DVERSION="${VERSION_STR}")
 
-add_executable(${PROJECT_NAME} ${SRCS_CXX} ${SRCS_H})
+add_executable(${PROJECT_NAME} WIN32 ${SRCS_CXX} ${SRCS_H} ${RES_RC})

@@ -1,0 +1,17 @@
+image:
+  - Visual Studio 2019
+
+skip_branch_with_pr: true
+
+install:
+  - choco install -y wixtoolset
+  - git config core.symlinks true
+  - git reset --hard
+  - git submodule update --init --recursive
+
+build_script:
+  - build_windows.cmd
+
+artifacts:
+  - path: build_win32_qt5/FBReader_0.99.5_win32_qt5.msi
+    name: qt5
