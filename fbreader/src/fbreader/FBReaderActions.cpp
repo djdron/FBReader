@@ -119,7 +119,7 @@ ShowPreferencesAction::ShowPreferencesAction() : ModeDependentAction(FBReader::B
 
 void ShowPreferencesAction::run() {
 	FBReader &fbreader = FBReader::Instance();
-	shared_ptr<Book> book = fbreader.myModel->book();
+	shared_ptr<Book> book = fbreader.currentBook();
 	if (OptionsDialog(book).dialog().run()) {
 		fbreader.openBook(book);
 		fbreader.refreshWindow();

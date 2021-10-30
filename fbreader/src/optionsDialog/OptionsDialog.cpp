@@ -283,7 +283,8 @@ OptionsDialog::OptionsDialog(shared_ptr<Book> book) : myBook(book) {
 
 	//myDialog.createPlatformDependentTabs();
 	// ---- languages page ----
-
+	if(book.isNull())
+		return;
 	// ++++ current book page ++++
 	ZLDialogContent &commonTab = myDialog->createTab(ZLResourceKey("book"), ZLResourceKey("bookGeneral"));
 	commonTab.addOption(
