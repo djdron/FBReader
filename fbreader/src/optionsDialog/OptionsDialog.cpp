@@ -129,6 +129,8 @@ void BookLanguageEntry::onAcceptCode(const std::string &code) {
 OptionsDialog::ApplyAction::ApplyAction(OptionsDialog &dialog) : myInfoDialog(dialog) {}
 
 void OptionsDialog::ApplyAction::run() {
+	if(myInfoDialog.myBook.isNull())
+		return;
 	Book &book = *myInfoDialog.myBook;
 
 	AuthorList authors;
