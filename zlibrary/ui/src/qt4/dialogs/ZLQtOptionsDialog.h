@@ -37,13 +37,13 @@ public:
 	ZLDialogContent &createTab(const ZLResourceKey &pageKey, const ZLResourceKey &tabKey);
 
 protected:
-	void resizeEvent(QResizeEvent* event);
 	bool run();
 
 private Q_SLOTS:
 	void apply();
 	void selectPage(int index);
 	void selectTab(int index);
+	void storeGeometry();
 
 private:
 	QListWidget *myCategoryList;

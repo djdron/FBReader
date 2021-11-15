@@ -80,6 +80,8 @@ ZLQtOptionsDialog::ZLQtOptionsDialog(const ZLResource &resource, shared_ptr<ZLRu
 	applyButton->setText(ZLQtDialogManager::qtButtonText(ZLDialogManager::APPLY_BUTTON));
 	connect(applyButton, SIGNAL(clicked()), this, SLOT(apply()));
 
+	connect(this, SIGNAL(finished(int)), this, SLOT(storeGeometry()));
+
 	myCategoryList = new QListWidget(this);
 	QPixmap pixmap = ZLQtImageUtil::pixmap("fbreader.png");
 	myCategoryList->setIconSize(pixmap.size());
@@ -158,7 +160,6 @@ bool ZLQtOptionsDialog::run() {
 	return exec() == QDialog::Accepted;
 }
 
-void ZLQtOptionsDialog::resizeEvent(QResizeEvent* event) {
-	QDialog::resizeEvent(event);
+void ZLQtOptionsDialog::storeGeometry() {
 	myGeometryOptions.getFromWidget(*this);
 }

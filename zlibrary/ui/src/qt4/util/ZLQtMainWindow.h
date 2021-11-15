@@ -32,12 +32,13 @@ class QWidget;
 class QToolBar;
 
 class ZLQtMainWindow : public QMainWindow {
+	Q_OBJECT
 
 protected:
 	ZLQtMainWindow(QWidget *parent, const std::string &windowName);
-	virtual ~ZLQtMainWindow();
 
 	void resizeEvent(QResizeEvent* event);
+	void closeEvent(QCloseEvent* event);
 
 public:
 	void showWithGeometry();

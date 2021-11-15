@@ -36,8 +36,9 @@ ZLQtMainWindow::ZLQtMainWindow(QWidget *parent, const std::string &windowName) :
 	myGeometryOptions.setToWidget(*this);
 }
 
-ZLQtMainWindow::~ZLQtMainWindow() {
+void ZLQtMainWindow::closeEvent(QCloseEvent* event) {
 	saveWindowGeometry();
+	QMainWindow::closeEvent(event);
 }
 
 void ZLQtMainWindow::resizeEvent(QResizeEvent* event) {

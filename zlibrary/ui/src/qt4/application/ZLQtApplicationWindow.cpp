@@ -117,6 +117,7 @@ void ZLQtApplicationWindow::wheelEvent(QWheelEvent *event) {
 }
 
 void ZLQtApplicationWindow::closeEvent(QCloseEvent *event) {
+	ZLQtMainWindow::closeEvent(event);
 	if (application().closeView()) {
 		event->accept();
 	} else {

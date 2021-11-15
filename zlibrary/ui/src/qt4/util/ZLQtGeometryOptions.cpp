@@ -25,35 +25,25 @@
 static const std::string OPTIONS = "Options";
 
 ZLQtGeometryOptions::ZLQtGeometryOptions(const std::string &prefix) :
-	myX(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "XPosition", 0, QApplication::desktop()->width() - 10, 10),
-	myY(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "YPosition", 0, QApplication::desktop()->height() - 10, 10),
-	myWidth(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Width", 10, QApplication::desktop()->width(), QApplication::desktop()->width() / 2),
-	myHeight(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Height", 10, QApplication::desktop()->height(), QApplication::desktop()->height() / 2)
+	myX(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "XPosition", 0, QApplication::desktop()->width()*0.9f, QApplication::desktop()->width()*(prefix.empty() ? 0.1f : 0.25f)),
+	myY(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "YPosition", 0, QApplication::desktop()->height()*0.9f, QApplication::desktop()->height()*(prefix.empty() ? 0.1f : 0.25f)),
+	myWidth(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Width", 10, QApplication::desktop()->width(), QApplication::desktop()->width()*(prefix.empty() ? 0.8f : 0.5f)),
+	myHeight(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Height", 10, QApplication::desktop()->height(), QApplication::desktop()->height()*(prefix.empty() ? 0.8f : 0.5f))
   {
 }
 
 void ZLQtGeometryOptions::getFromWidget(const QWidget &widget) {
-	QPoint position = widget.pos();
-	if (position.x() != -1) {
-		myX.setValue(position.x());
+	QRect r = widget.geometry();
+	if (r.left() != -1) {
+		myX.setValue(r.left());
 	}
-	if (position.y() != -1) {
-		myY.setValue(position.y());
+	if (r.top() != -1) {
+		myY.setValue(r.top());
 	}
-	myWidth.setValue(widget.width());
-	myHeight.setValue(widget.height());
+	myWidth.setValue(r.width());
+	myHeight.setValue(r.height());
 }
 
 void ZLQtGeometryOptions::setToWidget(QWidget &widget) const {
-	const int x = myX.value();
-	const int y = myY.value();
-	const int w = myWidth.value();
-	const int h = myHeight.value();
-	widget.setGeometry(x, y, w, h);
-	QPoint position = widget.pos();
-	const int deltaX = x - position.x();
-	const int deltaY = y - position.y();
-	const int deltaW = w - widget.width();
-	const int deltaH = h - widget.height();
-	widget.setGeometry(x + deltaX, y + deltaY, w + deltaW, h + deltaH);
+	widget.setGeometry(myX.value(), myY.value(), myWidth.value(), myHeight.value());
 }
