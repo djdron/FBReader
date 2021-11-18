@@ -18,6 +18,7 @@
  */
 
 #include <QtWidgets/QToolBar>
+#include <QTimer>
 
 #include "ZLQtMainWindow.h"
 
@@ -33,12 +34,21 @@ ZLQtMainWindow::ZLQtMainWindow(QWidget *parent, const std::string &windowName) :
 	myToolbar->setMovable(false);
 	addToolBar(myToolbar);
 
+	timer = new QTimer(this);
+	timer->setSingleShot(true);
+	connect(timer, &QTimer::timeout, this, &ZLQtMainWindow::saveWindowGeometry);
+
 	myGeometryOptions.setToWidget(*this);
 }
 
 void ZLQtMainWindow::closeEvent(QCloseEvent* event) {
 	saveWindowGeometry();
 	QMainWindow::closeEvent(event);
+}
+
+void ZLQtMainWindow::moveEvent(QMoveEvent* event) {
+	QMainWindow::moveEvent(event);
+	timer->start(100);
 }
 
 void ZLQtMainWindow::resizeEvent(QResizeEvent* event) {
@@ -48,7 +58,7 @@ void ZLQtMainWindow::resizeEvent(QResizeEvent* event) {
 	} else {
 		myToolbar->show();
 	}
-	saveWindowGeometry();
+	timer->start(100);
 }
 
 void ZLQtMainWindow::showWithGeometry() {

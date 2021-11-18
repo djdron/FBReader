@@ -37,6 +37,7 @@ class ZLQtMainWindow : public QMainWindow {
 protected:
 	ZLQtMainWindow(QWidget *parent, const std::string &windowName);
 
+	void moveEvent(QMoveEvent* event);
 	void resizeEvent(QResizeEvent* event);
 	void closeEvent(QCloseEvent* event);
 
@@ -54,6 +55,7 @@ private:
 
 protected:
 	QToolBar *myToolbar;
+	QTimer* timer;
 
 private:
 	const std::string myOptionPrefix;
