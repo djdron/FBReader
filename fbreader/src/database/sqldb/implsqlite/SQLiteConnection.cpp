@@ -40,6 +40,8 @@ bool SQLiteConnection::open() {
 	}
 	int res = sqlite3_open(myName.c_str(), &myDatabase);
 	if (res == SQLITE_OK) {
+		sqlite3_db_config(myDatabase, SQLITE_DBCONFIG_DQS_DDL, 1, (void*)0);
+		sqlite3_db_config(myDatabase, SQLITE_DBCONFIG_DQS_DML, 1, (void*)0);
 		return true;
 	}
 	dumpError();
