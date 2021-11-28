@@ -30,7 +30,10 @@ public:
 	static void createInstance() { ourInstance = new ZLWin32FSManager(); }
 
 	static ZLUnicodeUtil::Ucs2String longFilePath(const std::string &path);
-	
+
+protected:
+	ZLWin32FSManager();
+
 private:
 	shared_ptr<ZLMimeType> mimeType(const std::string &path) const;
 	void normalizeRealPath(std::string &path) const;

@@ -65,6 +65,17 @@ static std::string getAppDir() {
 	return result;
 }
 
+ZLWin32FSManager::ZLWin32FSManager()
+{
+	wchar_t buf[2048];
+	GetModuleFileNameW(0, buf, 2047);
+	wchar_t* last_delim = wcsrchr(buf, '\\');
+	if (last_delim)	{
+		*last_delim = '\0';
+		SetCurrentDirectoryW(buf);
+	}
+}
+
 ZLFSDir *ZLWin32FSManager::createPlainDirectory(const std::string &path) const {
 	if (path.empty()) {
 		return new ZLWin32RootDir();

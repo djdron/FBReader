@@ -48,4 +48,6 @@ void ZLQtFSManager::normalizeRealPath(std::string &path) const {
 		static const std::string replacement = (const char*)QDir::homePath().toUtf8();
 	  path = replacement + path.substr(1);
 	}
+	auto p = QString::fromUtf8(path.c_str());
+	path = (const char*)QDir::fromNativeSeparators(p).toUtf8();
 }

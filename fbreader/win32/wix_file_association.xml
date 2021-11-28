@@ -1,0 +1,19 @@
+﻿<CPackWiXPatch>
+	<CPackWiXFragment Id="CM_CP_fbreader.exe">
+		<ProgId Id='FBReader.fb2file' Description='FictionBook (open XML-based e-book format)'>
+			<Extension Id='fb2' ContentType='application/fb2'>
+				<Verb Id='open' Command='Open' TargetFile='CM_FP_fbreader.exe' Argument='"%1"' />
+			</Extension>
+		</ProgId>
+		<ProgId Id='FBReader.epubfile' Description='Electronic publication book (W3C standard)'>
+			<Extension Id='epub' ContentType='application/epub+zip'>
+				<Verb Id='open' Command='Open' TargetFile='CM_FP_fbreader.exe' Argument='"%1"' />
+			</Extension>
+		</ProgId>
+		<ProgId Id='FBReader.mobifile' Description='Mobipocket e-book (Amazon Kindle format)'>
+			<Extension Id='mobi' ContentType='application/mobi'>
+				<Verb Id='open' Command='Open' TargetFile='CM_FP_fbreader.exe' Argument='"%1"' />
+			</Extension>
+		</ProgId>
+	</CPackWiXFragment>
+</CPackWiXPatch>
