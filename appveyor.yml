@@ -4,7 +4,7 @@ image:
 skip_branch_with_pr: true
 
 install:
-  - choco install -y wixtoolset
+  - choco install -y wixtoolset --version=3.11.2
   - git config core.symlinks true
   - git reset --hard
   - git submodule update --init --recursive
