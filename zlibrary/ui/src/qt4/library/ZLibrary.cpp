@@ -18,12 +18,11 @@
  */
 
 #include <QtCore/QFile>
-#include <QtCore/QTextCodec>
 #include <QtCore/QUrl>
 #include <QtGui/QDesktopServices>
 #include <QtGui/QFileOpenEvent>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QScreen>
 
 #include <ZLApplication.h>
 #include <ZLibrary.h>
@@ -135,15 +134,15 @@ bool ZLibrary::openUrl(const std::string &url) {
 
 std::size_t ZLibrary::displayDPI() {
 	// TODO: may be logicalDpiY?
-	return QApplication::desktop()->physicalDpiY();
+	return qApp->screens()[0]->physicalDotsPerInchY();
 }
 
 std::size_t ZLibrary::displayPixelsHeight() {
 	// TODO: may be logicalDpiY?
-	return QApplication::desktop()->height();
+	return qApp->screens()[0]->size().height();
 }
 
 std::size_t ZLibrary::displayPixelsWidth() {
 	// TODO: may be logicalDpiY?
-	return QApplication::desktop()->width();
+	return qApp->screens()[0]->size().width();
 }

@@ -31,7 +31,7 @@ std::string ZLQtFSManager::convertFilenameToUtf8(const std::string &name) const 
 	}
 
 	QString qString = QString::fromLocal8Bit(name.c_str());
-	return (qString == QString::null) ? "" : (const char*)qString.toUtf8();
+	return qString.isEmpty() ? "" : (const char*)qString.toUtf8();
 }
 
 shared_ptr<ZLMimeType> ZLQtFSManager::mimeType(const std::string &path) const {

@@ -19,7 +19,6 @@
 
 #include <QtCore/QThreadPool>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>

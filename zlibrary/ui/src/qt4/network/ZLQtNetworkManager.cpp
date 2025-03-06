@@ -173,8 +173,8 @@ void ZLQtNetworkManager::prepareReply(ZLQtNetworkReplyScope &scope, QNetworkRequ
 	QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(onReplyReadyRead()));
 	QObject::disconnect(scope.timeoutTimer, 0, this, 0);
 	QObject::connect(scope.timeoutTimer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
-	reply->setProperty("scope", qVariantFromValue(scope));
-	scope.timeoutTimer->setProperty("reply", qVariantFromValue(reply));
+	reply->setProperty("scope", QVariant::fromValue(scope));
+	scope.timeoutTimer->setProperty("reply", QVariant::fromValue(reply));
 	scope.timeoutTimer->start(timeoutValue());
 }
 
@@ -293,7 +293,7 @@ void ZLQtNetworkManager::onAuthenticationRequired(QNetworkReply *reply, QAuthent
 	authenticator->setUser(::qtString(scope.request->userName()));
 	authenticator->setPassword(::qtString(scope.request->password()));
 	scope.authAskedAlready = true;
-	reply->setProperty("scope", qVariantFromValue(scope));
+	reply->setProperty("scope", QVariant::fromValue(scope));
 }
 
 void ZLQtNetworkManager::onSslErrors(const QList<QSslError> &errors) {

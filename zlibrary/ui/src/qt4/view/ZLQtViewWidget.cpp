@@ -40,12 +40,12 @@ public:
 private:
 	void mouseMoveEvent(QMouseEvent *event) {
 		if (orientation() == Qt::Vertical) {
-			const int y = event->y();
+			const int y = event->position().y();
 			if (y <= 0 || y >= height()) {
 				return;
 			}
 		} else {
-			const int x = event->x();
+			const int x = event->position().x();
 			if (x <= 0 || x >= width()) {
 				return;
 			}
@@ -75,7 +75,7 @@ QScrollBar *ZLQtViewWidget::addScrollBar(QGridLayout *layout, Qt::Orientation or
 ZLQtViewWidget::ZLQtViewWidget(QWidget *parent, ZLApplication *application) : ZLViewWidget((ZLView::Angle)application->AngleStateOption.value()), myApplication(application) {
 	myFrame = new QWidget(parent);
 	QGridLayout *layout = new QGridLayout();
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 	myFrame->setLayout(layout);
 	myQWidget = new Widget(myFrame, *this);
@@ -153,13 +153,13 @@ int ZLQtViewWidget::Widget::x(const QMouseEvent *event) const {
 	const int maxY = height() - 1;
 	switch (myHolder.rotation()) {
 		default:
-			return std::min(std::max(event->x(), 0), maxX);
+			return std::min(std::max(event->pos().x(), 0), maxX);
 		case ZLView::DEGREES90:
-			return maxY - std::min(std::max(event->y(), 0), maxY);
+			return maxY - std::min(std::max(event->pos().y(), 0), maxY);
 		case ZLView::DEGREES180:
-			return maxX - std::min(std::max(event->x(), 0), maxX);
+			return maxX - std::min(std::max(event->pos().x(), 0), maxX);
 		case ZLView::DEGREES270:
-			return std::min(std::max(event->y(), 0), maxY);
+			return std::min(std::max(event->pos().y(), 0), maxY);
 	}
 }
 
@@ -168,13 +168,13 @@ int ZLQtViewWidget::Widget::y(const QMouseEvent *event) const {
 	const int maxY = height() - 1;
 	switch (myHolder.rotation()) {
 		default:
-			return std::min(std::max(event->y(), 0), maxY);
+			return std::min(std::max(event->pos().y(), 0), maxY);
 		case ZLView::DEGREES90:
-			return std::min(std::max(event->x(), 0), maxX);
+			return std::min(std::max(event->pos().x(), 0), maxX);
 		case ZLView::DEGREES180:
-			return maxY - std::min(std::max(event->y(), 0), maxY);
+			return maxY - std::min(std::max(event->pos().y(), 0), maxY);
 		case ZLView::DEGREES270:
-			return maxX - std::min(std::max(event->x(), 0), maxX);
+			return maxX - std::min(std::max(event->pos().x(), 0), maxX);
 	}
 }
 

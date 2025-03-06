@@ -36,7 +36,7 @@
 class ZLQtLabelAction : public QLabel {
 
 public:
-	ZLQtLabelAction(shared_ptr<ZLTreeAction> action, QWidget *parent=0, Qt::WindowFlags f=0);
+	ZLQtLabelAction(shared_ptr<ZLTreeAction> action, QWidget *parent=0, Qt::WindowFlags f=Qt::WindowFlags());
 
 protected:
 	 void mousePressEvent(QMouseEvent *ev);

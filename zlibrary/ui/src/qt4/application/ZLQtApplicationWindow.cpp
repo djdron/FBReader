@@ -107,8 +107,8 @@ ZLQtApplicationWindow::~ZLQtApplicationWindow() {
 }
 
 void ZLQtApplicationWindow::wheelEvent(QWheelEvent *event) {
-	if (event->orientation() == Qt::Vertical) {
-		if (event->delta() > 0) {
+	if (event->angleDelta().y()) {
+		if (event->angleDelta().y() > 0) {
 			application().doActionByKey(ZLApplication::MouseScrollUpKey);
 		} else {
 			application().doActionByKey(ZLApplication::MouseScrollDownKey);

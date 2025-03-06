@@ -79,7 +79,7 @@ void ZLQtSearchField::onReturnPressed() {
 }
 
 void ZLQtSearchField::updateSuggestions() {
-	QStringListModel *model = new QStringListModel(mySuggestions.toList(), this);
+	QStringListModel *model = new QStringListModel(QList<QString>(mySuggestions.begin(), mySuggestions.end()), this);
 	this->completer()->setModel(model);
 }
 

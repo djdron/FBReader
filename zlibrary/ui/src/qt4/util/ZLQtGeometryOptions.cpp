@@ -18,17 +18,18 @@
  */
 
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QWidget>
+#include <QScreen>
 
 #include "ZLQtGeometryOptions.h"
 
 static const std::string OPTIONS = "Options";
 
 ZLQtGeometryOptions::ZLQtGeometryOptions(const std::string &prefix) :
-	myX(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "XPosition", 0, QApplication::desktop()->width()*0.9f, QApplication::desktop()->width()*(prefix.empty() ? 0.1f : 0.25f)),
-	myY(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "YPosition", 0, QApplication::desktop()->height()*0.9f, QApplication::desktop()->height()*(prefix.empty() ? 0.1f : 0.25f)),
-	myWidth(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Width", 10, QApplication::desktop()->width(), QApplication::desktop()->width()*(prefix.empty() ? 0.8f : 0.5f)),
-	myHeight(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Height", 10, QApplication::desktop()->height(), QApplication::desktop()->height()*(prefix.empty() ? 0.8f : 0.5f))
+	myX(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "XPosition", 0, qApp->screens()[0]->size().width()*0.9f, qApp->screens()[0]->size().width()*(prefix.empty() ? 0.1f : 0.25f)),
+	myY(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "YPosition", 0, qApp->screens()[0]->size().height()*0.9f, qApp->screens()[0]->size().height()*(prefix.empty() ? 0.1f : 0.25f)),
+	myWidth(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Width", 10, qApp->screens()[0]->size().width(), qApp->screens()[0]->size().width()*(prefix.empty() ? 0.8f : 0.5f)),
+	myHeight(ZLCategoryKey::LOOK_AND_FEEL, OPTIONS, prefix + "Height", 10, qApp->screens()[0]->size().height(), qApp->screens()[0]->size().height()*(prefix.empty() ? 0.8f : 0.5f))
   {
 }
 

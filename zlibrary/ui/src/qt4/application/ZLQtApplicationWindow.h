@@ -24,7 +24,7 @@
 #include <list>
 
 #include <QtGui/QCursor>
-#include <QtWidgets/QAction>
+#include <QAction>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 

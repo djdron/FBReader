@@ -22,7 +22,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QFileDialog>
-#include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QToolBar>
 
@@ -66,7 +65,7 @@ void ZLQtDialogManager::informationBox(const std::string &title, const std::stri
 	if (parent == 0) {
 		parent = myStoredWindow;
 	}
-	QMessageBox::information(parent, ::qtString(title), ::qtString(message), qtButtonText(OK_BUTTON));
+	QMessageBox::information(parent, ::qtString(title), ::qtString(message));
 }
 
 void ZLQtDialogManager::errorBox(const ZLResourceKey &key, const std::string &message) const {
@@ -74,7 +73,7 @@ void ZLQtDialogManager::errorBox(const ZLResourceKey &key, const std::string &me
 	if (parent == 0) {
 		parent = myStoredWindow;
 	}
-	QMessageBox::critical(parent, ::qtString(dialogTitle(key)), ::qtString(message), qtButtonText(OK_BUTTON));
+	QMessageBox::critical(parent, ::qtString(dialogTitle(key)), ::qtString(message));
 }
 
 int ZLQtDialogManager::questionBox(const ZLResourceKey &key, const std::string &message, const ZLResourceKey &button0, const ZLResourceKey &button1, const ZLResourceKey &button2) const {
@@ -111,7 +110,7 @@ void ZLQtDialogManager::setClipboardImage(const ZLImageData &imageData, Clipboar
 
 QString ZLQtDialogManager::qtButtonText(const ZLResourceKey &key) {
 	if (key.Name.empty()) {
-		return QString::null;
+		return QString();
 	}
 	return ::qtString(buttonText(key));
 }

@@ -145,12 +145,12 @@ void ZLQtPaintContext::setFillColor(ZLColor color, FillStyle style) {
 }
 
 int ZLQtPaintContext::stringWidth(const char *str, int len, bool) const {
-	return myPainter->fontMetrics().width(QString::fromUtf8(str, len));
+	return myPainter->fontMetrics().horizontalAdvance(QString::fromUtf8(str, len));
 }
 
 int ZLQtPaintContext::spaceWidth() const {
 	if (mySpaceWidth == -1) {
-		mySpaceWidth = myPainter->fontMetrics().width(' ');
+		mySpaceWidth = myPainter->fontMetrics().horizontalAdvance(' ');
 	}
 	return mySpaceWidth;
 }
